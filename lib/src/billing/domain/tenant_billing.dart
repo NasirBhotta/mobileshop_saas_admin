@@ -32,6 +32,7 @@ class BillingInvoice {
   final String id, number, status, currency;
   final double amount;
   final DateTime issuedAt;
+  final String? planName, billingCycle;
   const BillingInvoice({
     required this.id,
     required this.number,
@@ -39,6 +40,8 @@ class BillingInvoice {
     required this.currency,
     required this.amount,
     required this.issuedAt,
+    this.planName,
+    this.billingCycle,
   });
   factory BillingInvoice.fromJson(Map<String, dynamic> j) => BillingInvoice(
     id: j['id'] as String,
@@ -47,6 +50,21 @@ class BillingInvoice {
     currency: j['currency'] as String,
     amount: (j['amount'] as num).toDouble(),
     issuedAt: DateTime.parse(j['issued_at'] as String),
+    planName: j['plan_name_snapshot'] as String?,
+    billingCycle: j['billing_cycle'] as String?,
+  );
+}
+
+class BillingPlan {
+  final String id, name;
+  final double? monthlyPrice;
+
+  const BillingPlan({required this.id, required this.name, this.monthlyPrice});
+
+  factory BillingPlan.fromJson(Map<String, dynamic> json) => BillingPlan(
+    id: json['id'] as String,
+    name: json['name'] as String,
+    monthlyPrice: (json['monthly_price'] as num?)?.toDouble(),
   );
 }
 
@@ -54,6 +72,7 @@ class BillingPayment {
   final String id, status, method, reference, currency;
   final double amount;
   final DateTime paidAt;
+  final String? invoiceId;
   const BillingPayment({
     required this.id,
     required this.status,
@@ -62,6 +81,7 @@ class BillingPayment {
     required this.currency,
     required this.amount,
     required this.paidAt,
+    this.invoiceId,
   });
   factory BillingPayment.fromJson(Map<String, dynamic> j) => BillingPayment(
     id: j['id'] as String,
@@ -71,6 +91,7 @@ class BillingPayment {
     currency: j['currency'] as String,
     amount: (j['amount'] as num).toDouble(),
     paidAt: DateTime.parse(j['paid_at'] as String),
+    invoiceId: j['invoice_id'] as String?,
   );
 }
 
